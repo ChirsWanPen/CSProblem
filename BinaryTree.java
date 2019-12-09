@@ -64,7 +64,7 @@ public class BinaryTree{
                 s = s+rt.ch;
             }
             prefix(rt.Lson, s);
-            prefis(rt.Rson, s);
+            prefix(rt.Rson, s);
         }
     }
     //中缀
