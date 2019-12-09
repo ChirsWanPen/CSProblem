@@ -1,4 +1,4 @@
-package CSproblem.work;
+package work;
 
 class node{
     public int flag = 0;  //标记是否有值
@@ -11,48 +11,58 @@ class node{
 
 public class BinaryTree{
     node rt;
-    String source = "";  //1+2+3#
-    String ansStr = "null";
-    double ansNum = 0;
+    String source = "";  //源字符串
+    String ansStr = "null";  //结果字符串
+    double ansNum = 0;  //求值结果
     //表达式求值过程
-    String opt = "+-*/()#";
-    String cmp[]={
-        ">><<<>>",
-        ">><<<>>",
-        ">>>><>>",
-        ">>>><>>",
-        "<<<<<+$",
-        ">>>>$>>",
-        "<<<<<$+"
+    String opt = "+-*/()";
+    String cmpr[]={
+        ">><<<>",
+        ">><<<>",
+        ">>>><>",
+        ">>>><>",
+        "<<<<<+",
+        ">>>>$>"
     };
-    boolean isOpt(char ch){
-        for(int i = 0; i < opt.length(); i++){
-            if(ch == opt.charAt(i))
-                return true;
+    //中缀式转后缀式
+    public void convertTosuffix(){//1+2+3#
+        String ans = "";
+        int len = source.length();
+        char st[] = new char[1000]; int top = 0;
+        for(int i = 0; i < len; i++){
+        	if(source.charAt(i) == '('){
+        		st[top++] = source.charAt(i);
+        		continue;
+        	}
+        	if(source.charAt(i) == ')'){
+        		while(st[top-1] != '('){
+        			ans += st[top-1];
+        			top--;
+        			ans += " ";
+        		}
+        		top--;
+        		continue;
+        	}
+        	if(isOpt(source.charAt(i))){
+        		while(top > 0 && cmpr[getIdx(st[top-1])].charAt(getIdx(source.charAt(i))) != '<'){
+        			ans += st[top-1];
+        			top--;
+        		}
+        		st[top++] = source.charAt(i);
+        	}
+        	else{
+        		while(!isOpt(source.charAt(i))){
+        			ans += source.charAt(i);
+        		}
+        	}
+        	ans += " ";
         }
-        return false;
-    }
-    char cmp(char opt1, char opt2){
-        return cmp[getIdx(opt1)].charAt(getIdx(opt2));
-    }
-    double calc(double num1, char opt, double num2){
-        double ans = 0;
-        if(opt == '+') ans = num1+num2;
-        if(opt == '-') ans = num1-num2;
-        if(opt == '*') ans = num1*num2;
-        if(opt == '/') ans = num1/num2;
-        return ans;
-    }
-    int getIdx(char ch){
-        for(int i = 0; i < opt.length(); i++){
-            if(opt.charAt(i) == ch)
-                return i;
+        while(top > 0){
+        	ans += st[top-1];
+        	top--;
+        	ans += " ";
         }
-        return -1;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-    }
-    //中缀式建树
-    public void build(){
-        
+        System.out.println("Hello :" + ans);
     }
     //前缀
     public void prefix(node rt, String s){
@@ -64,7 +74,7 @@ public class BinaryTree{
                 s = s+rt.ch;
             }
             prefix(rt.Lson, s);
-            prefis(rt.Rson, s);
+            prefix(rt.Rson, s);
         }
     }
     //中缀
@@ -126,4 +136,31 @@ public class BinaryTree{
         }
         return ansNum;
     }
+    boolean isOpt(char ch){  //判断是不是运算符
+        for(int i = 0; i < opt.length(); i++){
+            if(ch == opt.charAt(i))
+                return true;
+        }
+        return false;
+    }
+    char cmp(char opt1, char opt2){  //对两个操作符进行比较大小
+        return cmpr[getIdx(opt1)].charAt(getIdx(opt2));
+    }
+    double calc(double num1, char opt, double num2){  //完成一个运算
+        double ans = 0;
+        if(opt == '+') ans = num1+num2;
+        if(opt == '-') ans = num1-num2;
+        if(opt == '*') ans = num1*num2;
+        if(opt == '/') ans = num1/num2;
+        return ans;
+    }
+    int getIdx(char ch){  //得到运算符的下标
+        for(int i = 0; i < opt.length(); i++){
+            if(opt.charAt(i) == ch)
+                return i;
+        }
+        return -1;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+    }
+}
+  }
 }
